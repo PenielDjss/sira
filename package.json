@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "tsx src/__tests__/run-tests.ts"
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
@@ -17,6 +18,7 @@
     "tiged": "^2.12.7"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.11.0",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"

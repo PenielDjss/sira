@@ -8,6 +8,8 @@ Sira creates projects with CLAUDE.md, AGENTS.md, and .cursorrules files pre-conf
 
 - 🚀 **Fast scaffolding** — Create production-ready projects in seconds
 - 🤖 **AI-ready by default** — Every project includes AI context files
+- 🧠 **AI-powered template selection** — Intelligent agent analyzes your project description
+- 📦 **Automatic dependency installation** — One-command setup with smart package manager detection
 - 📦 **Modern templates** — React + Vite + TypeScript (more coming soon)
 - 🎨 **Beautiful CLI** — Interactive prompts with a clean design
 - 🔧 **Zero config** — Works out of the box
@@ -32,7 +34,36 @@ npm install -g sira
 
 ## 🚀 Usage
 
-### Create a new project
+### 🤖 Agent Mode (Recommended)
+
+Let Sira's AI agent analyze your project description and recommend the best template:
+
+```bash
+sira agent
+```
+
+**Example:**
+```
+? Project name: my-dashboard
+? Describe your project: I want to build an interactive dashboard with React
+
+🧠 Analyzing your project description...
+
+✨ Recommendation: HERMÈS
+   React + Vite + TypeScript — Fast frontend development
+   Confidence: 85%
+   Reasoning: HERMÈS is recommended because your description mentions: react, dashboard, interactive
+
+? Use HERMÈS template? Yes
+? Install dependencies automatically? Yes
+
+🚀 Creating your project...
+✨ All done! 🎉
+```
+
+### 📋 Manual Mode
+
+Choose a template manually:
 
 ```bash
 sira create
@@ -43,13 +74,13 @@ Follow the interactive prompts to:
 2. Choose a template
 3. Wait for the project to be created
 
-### List available templates
+### 📚 List Templates
 
 ```bash
 sira list
 ```
 
-### Show help
+### 🆘 Show Help
 
 ```bash
 sira --help
@@ -99,14 +130,34 @@ Cursor-specific rules for:
 - TypeScript rules
 - Framework patterns
 
+## 🧪 Testing
+
+Run the comprehensive test suite:
+
+```bash
+npm test
+```
+
+**Test Coverage:**
+- ✅ 12 unit tests (100% passing)
+- ✅ Agent module (template recommendation)
+- ✅ Installer module (dependency installation)
+- ✅ Stacks module (template registry)
+
 ## 🛠️ Development
 
 ```bash
 # Run in dev mode
 npm run dev create
 
+# Run agent mode in dev
+npm run dev agent
+
 # Build
 npm run build
+
+# Run tests
+npm test
 
 # Test locally
 npm link
@@ -149,10 +200,12 @@ Happy coding! ✨
 
 Most scaffolding tools generate code and stop there. Sira goes further by making every project **AI-ready from day one**:
 
-- ✅ No need to write AI context files manually
-- ✅ Consistent documentation across all projects
-- ✅ Start coding with AI assistance immediately
-- ✅ Save hours of setup time
+- ✅ **AI-Powered Selection** — Intelligent agent recommends the best template for your needs
+- ✅ **Automatic Setup** — Dependencies installed automatically with smart package manager detection
+- ✅ **No Manual Context** — AI context files generated automatically
+- ✅ **Consistent Documentation** — Every project follows the same structure
+- ✅ **Instant Productivity** — Start coding with AI assistance immediately
+- ✅ **Time Savings** — Save hours of setup and configuration time
 
 ## 🏗️ Architecture
 
@@ -162,6 +215,19 @@ Sira uses a two-repository structure:
 - **Templates Repository** (`sira-cli/templates`) — Project templates
 
 Templates are cloned from GitHub using [tiged](https://github.com/tiged/tiged), ensuring you always get the latest version.
+
+### Core Modules
+
+```
+src/
+├── index.ts       # CLI entry point and command routing
+├── ui.ts          # Design system (colors, prompts)
+├── stacks.ts      # Template registry
+├── clone.ts       # Template cloning pipeline
+├── agent.ts       # 🆕 AI-powered template recommendation
+├── installer.ts   # 🆕 Automatic dependency installation
+└── __tests__/     # Test suite
+```
 
 ## 🤝 Contributing
 
