@@ -37,6 +37,15 @@ const stackKeywords: Record<string, string[]> = {
     'django', 'python', 'fullstack', 'orm', 'admin', 'cms',
     'web framework', 'mvc', 'template', 'form', 'model',
     'postgresql', 'mysql', 'database-driven'
+  ],
+  'flask-hera': [
+    'flask', 'python', 'lightweight', 'api', 'backend', 'simple',
+    'microservice', 'rest', 'minimal', 'micro', 'endpoint'
+  ],
+  'next-apollon': [
+    'next', 'nextjs', 'fullstack', 'ssr', 'seo', 'blog',
+    'landing', 'app router', 'server components', 'react',
+    'tailwind', 'modern', 'website'
   ]
 };
 
@@ -303,7 +312,7 @@ export async function generateProjectMd(
   }
 
   // Build the PROJECT.md with AI-generated sections or fallback
-  const aiSections = aiContent ? buildAISections(projectName, aiContent) : buildFallbackSections(stack);
+  const aiSections = aiContent ? buildAISections(projectName, aiContent, stack) : buildFallbackSections(stack);
 
   return `# ${projectName}
 
@@ -420,12 +429,16 @@ ${stack.tech.map(tech => `- [${tech} Documentation](https://www.google.com/searc
  * Détecte le gestionnaire de paquets à utiliser
  */
 export function detectPackageManager(stack: Stack): 'npm' | 'pip' | 'yarn' | 'pnpm' {
-  // Pour Python/Django
-  if (stack.id.includes('django') || stack.tech.includes('Python')) {
+  // Pour Python (Django et Flask)
+  if (stack.id === 'django-athena' || stack.id === 'flask-hera' || stack.tech.includes('Python')) {
     return 'pip';
   }
 
-  // Pour Node.js, vérifier si yarn ou pnpm est disponible
+  // Pour Node.js et Next.js (node-ares, next-apollon, react-hermes)
+  if (stack.id === 'node-ares' || stack.id === 'next-apollon' || stack.id === 'react-hermes') {
+    return 'npm';
+  }
+
   // Par défaut, utiliser npm
   return 'npm';
 }
@@ -539,7 +552,7 @@ RESPOND WITH ONLY THE JSON OBJECT. NO TEXT BEFORE OR AFTER.`;
 /**
  * Construit les sections AI-générées du PROJECT.md
  */
-function buildAISections(projectName: string, aiContent: ProjectMdAIResponse): string {
+function buildAISections(projectName: string, aiContent: ProjectMdAIResponse, stack: Stack): string {
   const sections: string[] = [];
 
   // Section Dependencies
@@ -560,7 +573,10 @@ function buildAISections(projectName: string, aiContent: ProjectMdAIResponse): s
     if (allDeps.length > 0) {
       sections.push('## ⚡ Install Dependencies\n');
       sections.push('```bash');
-      sections.push(`npm install ${allDeps.join(' ')}`);
+      // Use pip for Python stacks, npm for others
+      const isPythonStack = stack.tech.includes('Python') || stack.tech.includes('Django') || stack.tech.includes('Flask');
+      const installCmd = isPythonStack ? `pip install ${allDeps.join(' ')}` : `npm install ${allDeps.join(' ')}`;
+      sections.push(installCmd);
       sections.push('```\n');
     }
   }
@@ -606,8 +622,10 @@ function buildFallbackSections(stack: Stack): string {
   // Basic dependencies based on stack
   const basicDeps: Record<string, string[]> = {
     'react-hermes': ['react', 'react-dom', 'vite'],
-    'node-ares': ['express', 'dotenv'],
-    'django-athena': []  // Python uses requirements.txt
+    'node-ares': ['express', 'dotenv', 'cors'],
+    'django-athena': [],  // Python uses requirements.txt
+    'flask-hera': ['flask', 'flask-cors', 'python-dotenv'],
+    'next-apollon': ['next', 'react', 'react-dom']
   };
 
   const deps = basicDeps[stack.id] || [];
@@ -623,7 +641,10 @@ function buildFallbackSections(stack: Stack): string {
 
     sections.push('## ⚡ Install Dependencies\n');
     sections.push('```bash');
-    sections.push(`npm install ${deps.join(' ')}`);
+    // Use pip for Python stacks, npm for others
+    const isPythonStack = stack.tech.includes('Python') || stack.tech.includes('Django') || stack.tech.includes('Flask');
+    const installCmd = isPythonStack ? `pip install ${deps.join(' ')}` : `npm install ${deps.join(' ')}`;
+    sections.push(installCmd);
     sections.push('```\n');
   }
 
