@@ -1,4 +1,4 @@
-# AGENTS.md — Sira Project Context
+# PROJECT.md — Sira Project Context
 
 > This file provides full context for any AI development partner (IBM Bob, Claude, Cursor, etc.)
 > working on the Sira project. Read this before doing anything else.
@@ -16,6 +16,16 @@ from day one.
 
 The core idea: **the best moment to set up AI context is at project creation, not as an
 afterthought.**
+
+### 🆕 Sira Agent Mode
+
+Sira now includes an **intelligent agent mode** that analyzes your project description and
+automatically recommends the best template for your needs. The agent:
+- Analyzes natural language descriptions
+- Scores templates based on keyword matching
+- Provides confidence levels and reasoning
+- Suggests alternatives
+- Automatically installs dependencies
 
 > Built during the IBM Bob Hackathon (May 2026) — Theme: "Turn idea into impact faster"
 
@@ -143,8 +153,20 @@ The main command. Walks the user through an interactive prompt to:
 2. Choose a template (HERMÈS, ARÈS, ATHÉNA)
 3. Clone the template into a new folder
 4. Generate AI context files (CLAUDE.md, AGENTS.md, .cursorrules)
-5. Run `npm install` (or `pip install` for Python)
+5. Optionally install dependencies
 6. Show success message with next steps
+
+### `sira agent` 🆕
+**AI-powered project creation**. The intelligent mode that:
+1. Asks for project name
+2. Asks for project description (natural language)
+3. Analyzes the description using keyword matching
+4. Recommends the best template with confidence score
+5. Shows reasoning and alternatives
+6. Allows manual override if needed
+7. Clones template and generates AI context files
+8. Optionally installs dependencies automatically
+9. Shows next steps
 
 ### `sira list`
 Lists all available templates with their tech stack and description.
@@ -220,18 +242,65 @@ Cursor-specific rules for code style, conventions, and preferred patterns.
 
 ---
 
+## Architecture Overview
+
+### Core Modules
+
+```
+src/
+├── index.ts       # CLI entry point and command routing
+├── ui.ts          # Design system (colors, prompts, spinners)
+├── stacks.ts      # Template registry with typed interfaces
+├── clone.ts       # Template cloning pipeline (tiged)
+├── agent.ts       # 🆕 AI agent for template recommendation
+└── installer.ts   # 🆕 Dependency installation automation
+```
+
+### Agent Module (`agent.ts`)
+
+The intelligent agent that powers `sira agent` command:
+
+**Key Functions:**
+- `analyzeProjectDescription()` — Analyzes project description and recommends template
+- `detectPackageManager()` — Detects appropriate package manager
+- `generateInstallCommands()` — Generates installation commands per stack
+
+**Algorithm:**
+1. Normalize description to lowercase
+2. Score each template based on keyword matches
+3. Calculate confidence percentage
+4. Generate reasoning based on found keywords
+5. Return recommendation with alternatives
+
+### Installer Module (`installer.ts`)
+
+Handles automatic dependency installation:
+
+**Key Functions:**
+- `installDependencies()` — Installs project dependencies
+- `checkPackageManager()` — Checks if package manager is available
+- `detectBestPackageManager()` — Finds best available package manager
+
+**Supported Package Managers:**
+- npm (Node.js default)
+- yarn (Node.js alternative)
+- pnpm (Node.js fast alternative)
+- pip (Python)
+
 ## What IBM Bob Should Help With
 
 When working on this project with Bob, the primary tasks are:
 
-1. **Implement `ui.ts`** — the CLI design system with @clack/core and picocolors
-2. **Implement `stacks.ts`** — the typed template registry with 3 initial templates
-3. **Implement `clone.ts`** — the tiged-based clone pipeline
-4. **Implement `index.ts`** — the main CLI entry point wiring everything together
-5. **Create template structures** — the actual template folders in the templates repo
-6. **Generate AI context file content** — meaningful CLAUDE.md/AGENTS.md per template
-7. **Write tests** — basic unit tests for core functions
-8. **Generate documentation** — README with usage examples
+1. ✅ **Implement `ui.ts`** — the CLI design system with @clack/core and picocolors
+2. ✅ **Implement `stacks.ts`** — the typed template registry with 3 initial templates
+3. ✅ **Implement `clone.ts`** — the tiged-based clone pipeline
+4. ✅ **Implement `index.ts`** — the main CLI entry point wiring everything together
+5. ✅ **Implement `agent.ts`** — AI-powered template recommendation
+6. ✅ **Implement `installer.ts`** — Automatic dependency installation
+7. **Create template structures** — the actual template folders in the templates repo
+8. **Generate AI context file content** — meaningful CLAUDE.md/AGENTS.md per template
+9. **Write tests** — basic unit tests for core functions
+10. **Generate documentation** — README with usage examples
 
 ---
 
@@ -249,23 +318,36 @@ When working on this project with Bob, the primary tasks are:
 
 ## Current Status
 
-> As of hackathon start (May 15, 2026):
+> As of May 16, 2026:
 
+### ✅ Completed (MVP)
 - [x] Repository created on GitHub (`sira-cli/sira`)
 - [x] MIT License added
-- [x] AGENTS.md written (this file)
-- [ ] `package.json` configured
-- [ ] `tsconfig.json` configured
-- [ ] `src/ui.ts` implemented
-- [ ] `src/stacks.ts` implemented
-- [ ] `src/clone.ts` implemented
-- [ ] `src/index.ts` implemented
-- [ ] Templates repo created
-- [ ] `react-hermes` template created
+- [x] PROJECT.md written (this file)
+- [x] `package.json` configured
+- [x] `tsconfig.json` configured
+- [x] `src/ui.ts` implemented
+- [x] `src/stacks.ts` implemented
+- [x] `src/clone.ts` implemented
+- [x] `src/index.ts` implemented (basic commands)
+- [x] Templates repo created
+- [x] `react-hermes` template created
+
+### ✅ Completed (Agent Mode)
+- [x] `src/agent.ts` implemented — AI-powered template recommendation
+- [x] `src/installer.ts` implemented — Automatic dependency installation
+- [x] `sira agent` command added to CLI
+- [x] PROJECT.md updated with agent documentation
+
+### 🔄 In Progress
+- [ ] Unit tests for agent and installer modules
+- [ ] Enhanced README with agent mode examples
+
+### 📋 Planned
 - [ ] `node-ares` template created
 - [ ] `django-athena` template created
-- [ ] README written
-- [ ] Tests written
+- [ ] Integration tests
+- [ ] CI/CD pipeline
 
 ---
 
