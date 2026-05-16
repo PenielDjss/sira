@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
+    "@ibm-cloud/watsonx-ai": "^1.7.12",
+    "dotenv": "^17.4.2",
     "picocolors": "^1.0.0",
     "tiged": "^2.12.7"
   },

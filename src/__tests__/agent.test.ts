@@ -8,46 +8,46 @@ import { stacks } from '../stacks.js';
 
 describe('Agent Module', () => {
   describe('analyzeProjectDescription', () => {
-    it('should recommend React template for frontend keywords', () => {
+    it('should recommend React template for frontend keywords', async () => {
       const description = 'I want to build a dashboard with React and interactive UI components';
-      const analysis = analyzeProjectDescription(description);
+      const analysis = await analyzeProjectDescription(description);
       
       expect(analysis.recommendedStack.id).toBe('react-hermes');
       expect(analysis.confidence).toBeGreaterThan(0);
       expect(analysis.reasoning).toContain('react');
     });
 
-    it('should provide alternatives when multiple templates match', () => {
+    it('should provide alternatives when multiple templates match', async () => {
       const description = 'Build a web application with database and API';
-      const analysis = analyzeProjectDescription(description);
+      const analysis = await analyzeProjectDescription(description);
       
       expect(analysis.recommendedStack).toBeDefined();
       expect(analysis.alternatives).toBeDefined();
       expect(Array.isArray(analysis.alternatives)).toBe(true);
     });
 
-    it('should handle generic descriptions with default recommendation', () => {
+    it('should handle generic descriptions with default recommendation', async () => {
       const description = 'I want to build something cool';
-      const analysis = analyzeProjectDescription(description);
+      const analysis = await analyzeProjectDescription(description);
       
       expect(analysis.recommendedStack).toBeDefined();
       expect(analysis.confidence).toBeGreaterThanOrEqual(0);
       expect(analysis.reasoning).toBeDefined();
     });
 
-    it('should calculate confidence based on keyword matches', () => {
+    it('should calculate confidence based on keyword matches', async () => {
       const strongMatch = 'React frontend SPA with Vite and TypeScript components';
       const weakMatch = 'Build an application';
       
-      const strongAnalysis = analyzeProjectDescription(strongMatch);
-      const weakAnalysis = analyzeProjectDescription(weakMatch);
+      const strongAnalysis = await analyzeProjectDescription(strongMatch);
+      const weakAnalysis = await analyzeProjectDescription(weakMatch);
       
       expect(strongAnalysis.confidence).toBeGreaterThan(weakAnalysis.confidence);
     });
 
-    it('should include reasoning in the analysis', () => {
+    it('should include reasoning in the analysis', async () => {
       const description = 'Create a React dashboard with interactive UI';
-      const analysis = analyzeProjectDescription(description);
+      const analysis = await analyzeProjectDescription(description);
       
       expect(analysis.reasoning).toBeDefined();
       expect(typeof analysis.reasoning).toBe('string');
@@ -123,14 +123,14 @@ describe('Agent Module', () => {
     };
   }
   
-  function describe(name: string, fn: () => void) {
+  function describe(name: string, fn: () => void | Promise<void>) {
     console.log(`\n${name}`);
-    fn();
+    return fn();
   }
   
-  function it(name: string, fn: () => void) {
+  async function it(name: string, fn: () => void | Promise<void>) {
     try {
-      fn();
+      await fn();
       console.log(`  ✓ ${name}`);
     } catch (error) {
       console.log(`  ✗ ${name}`);

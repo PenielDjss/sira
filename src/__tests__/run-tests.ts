@@ -74,26 +74,26 @@ function it(name: string, fn: () => void | Promise<void>) {
 async function testAgentModule() {
   await describe('Agent Module', async () => {
     await describe('analyzeProjectDescription', async () => {
-      await it('should recommend React template for frontend keywords', () => {
+      await it('should recommend React template for frontend keywords', async () => {
         const description = 'I want to build a dashboard with React and interactive UI components';
-        const analysis = analyzeProjectDescription(description);
+        const analysis = await analyzeProjectDescription(description);
         
         expect(analysis.recommendedStack.id).toBe('react-hermes');
         expect(analysis.confidence).toBeGreaterThan(0);
       });
 
-      await it('should provide alternatives when multiple templates match', () => {
+      await it('should provide alternatives when multiple templates match', async () => {
         const description = 'Build a web application with database and API';
-        const analysis = analyzeProjectDescription(description);
+        const analysis = await analyzeProjectDescription(description);
         
         expect(analysis.recommendedStack).toBeDefined();
         expect(analysis.alternatives).toBeDefined();
         expect(Array.isArray(analysis.alternatives)).toBe(true);
       });
 
-      await it('should handle generic descriptions', () => {
+      await it('should handle generic descriptions', async () => {
         const description = 'I want to build something cool';
-        const analysis = analyzeProjectDescription(description);
+        const analysis = await analyzeProjectDescription(description);
         
         expect(analysis.recommendedStack).toBeDefined();
         expect(analysis.confidence).toBeGreaterThanOrEqual(0);
