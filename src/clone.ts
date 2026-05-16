@@ -2,12 +2,14 @@ import tiged from 'tiged';
 import { writeFile, readFile } from 'fs/promises';
 import { join } from 'path';
 import type { Stack } from './stacks.js';
+import { generateProjectMd } from './agent.js';
 
 export async function cloneTemplate(
   stack: Stack,
   projectName: string,
   targetDir: string = process.cwd(),
-  verbose: boolean = true
+  verbose: boolean = true,
+  description?: string
 ): Promise<string> {
   const projectPath = join(targetDir, projectName);
   
@@ -45,7 +47,7 @@ export async function cloneTemplate(
     if (verbose) {
       console.log(`\n📝 Generating AI context files...`);
     }
-    await generateAIFiles(projectPath, stack, projectName, verbose);
+    await generateAIFiles(projectPath, stack, projectName, description, verbose);
     
     // 3. Update package.json with project name
     if (verbose) {
@@ -79,6 +81,7 @@ async function generateAIFiles(
   projectPath: string,
   stack: Stack,
   projectName: string,
+  description?: string,
   verbose: boolean = false
 ): Promise<void> {
   const files = [
@@ -95,6 +98,15 @@ async function generateAIFiles(
       content: stack.aiFiles.cursorrules.replace(/\[Project Name\]/g, projectName)
     },
   ];
+  
+  // Add PROJECT.md if description is provided
+  if (description) {
+    const projectMdContent = await generateProjectMd(projectName, description, stack);
+    files.push({
+      name: 'PROJECT.md',
+      content: projectMdContent
+    });
+  }
   
   for (const file of files) {
     if (verbose) {
