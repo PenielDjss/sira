@@ -102,7 +102,7 @@ Language for reasoning: ${isFrench ? 'French' : 'English'}
 IMPORTANT: recommendedStackId must be exactly one of these values: ${stacks.map(s => `"${s.id}"`).join(', ')}
 
 Respond with ONLY this JSON, no other text:
-{"recommendedStackId":"react-hermes","confidence":85,"reasoning":"your reasoning here","alternatives":[]}`;
+{"recommendedStackId":"react-hermes","confidence":85,"reasoning":"explanation of why this stack fits the project","alternatives":[]}`;
 
     // Appeler l'API watsonx.ai
     const response = await watsonxAI.generateText({

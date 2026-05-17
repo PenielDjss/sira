@@ -1,5 +1,5 @@
 {
-  "name": "sira",
+  "name": "sira-cli",
   "version": "0.1.0",
   "description": "CLI scaffolding tool that generates AI-ready project structures",
   "type": "module",
